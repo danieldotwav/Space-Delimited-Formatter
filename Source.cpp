@@ -2,38 +2,37 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-using namespace std;
 
-void purgeInputErrors(string error_message);
+void purgeInputErrors(std::string error_message);
 
 int main() {
-	string default_file_name = "Formatted.txt";
-	string formatted_file_name;
-	ifstream infile("input.txt");
+	std::string default_file_name = "Formatted.txt";
+	std::string formatted_file_name;
+	std::ifstream infile("input.txt");
 
 	if (!infile) {
-		cout << "Error: Unable to open input file. Terminating program.\n\n";
+		std::cout << "Error: Unable to open input file. Terminating program.\n\n";
 		exit(EXIT_FAILURE);
 	}
 
-	cout << "Enter Formatted File Name: ";
-	cin >> formatted_file_name;
+	std::cout << "Enter Formatted File Name: ";
+	std::cin >> formatted_file_name;
 
-	ofstream outfile;
-	if (!cin) {
+	std::ofstream outfile;
+	if (!std::cin) {
 		purgeInputErrors("Invalid File Name");
 		outfile.open(default_file_name);
-		cout << "File Saved as:" << default_file_name << endl;
+		std::cout << "File Saved as:" << default_file_name << std::endl;
 	}
 	else {
 		outfile.open(formatted_file_name);
-		cout << "File Saved as:" << formatted_file_name << endl;
+		std::cout << "File Saved as:" << formatted_file_name << std::endl;
 	}
 
-	string line;
+	std::string line;
 	while (getline(infile, line)) {
 		outfile << line << ' ';
-		cout << line << ' ';
+		std::cout << line << ' ';
 	}
 
 	infile.close();
@@ -42,8 +41,8 @@ int main() {
 	return 0;
 }
 
-void purgeInputErrors(string error_message) {
-	cin.clear();
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	cout << error_message << endl;
+void purgeInputErrors(std::string error_message) {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cout << error_message << std::endl;
 }
