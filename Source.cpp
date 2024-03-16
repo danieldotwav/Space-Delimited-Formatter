@@ -4,6 +4,7 @@
 #include <sstream>
 
 void purgeInputErrors(std::string error_message);
+std::string getFormattedFileName();
 
 int main() {
 	std::string default_file_name = "Formatted.txt";
@@ -15,25 +16,17 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 
-	std::cout << "Enter Formatted File Name: ";
-	std::cin >> formatted_file_name;
-
-	std::ofstream outfile;
-	if (!std::cin) {
-		purgeInputErrors("Invalid File Name");
-		outfile.open(default_file_name);
-		std::cout << "File Saved as:" << default_file_name << std::endl;
-	}
-	else {
-		outfile.open(formatted_file_name);
-		std::cout << "File Saved as:" << formatted_file_name << std::endl;
-	}
+	formatted_file_name = getFormattedFileName();
+	std::ofstream outfile(formatted_file_name);
+	std::cout << "File Created Successfully as:" << default_file_name << std::endl;
 
 	std::string line;
 	while (getline(infile, line)) {
 		outfile << line << ' ';
 		std::cout << line << ' ';
 	}
+
+	std::cout << "File Saved Successfully" << default_file_name << std::endl;
 
 	infile.close();
 	outfile.close();
@@ -45,4 +38,34 @@ void purgeInputErrors(std::string error_message) {
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::cout << error_message << std::endl;
+}
+
+std::string getFormattedFileName() {
+	std::string formatted_file_name;
+	std::cout << "Enter Formatted File Name: ";
+	std::cin >> formatted_file_name;
+
+	if (!std::cin) {
+		purgeInputErrors("Invalid File Name");
+		formatted_file_name = "Output.txt";
+	}
+	else {
+		// Ensure that there are no invalid characters in file name
+		bool is_valid_name = true;
+		int file_name_length = formatted_file_name.length();
+		char current_letter;
+
+		for (int i = 0; i < file_name_length && is_valid_name; ++i) {
+			current_letter = formatted_file_name[i];
+			if (ispunct(current_letter)) {
+				// The only valid punctuation characters are '-' and '_'
+				if (current_letter != '-' && current_letter != '_') {
+					is_valid_name = false;
+					formatted_file_name = "Output.txt";
+				}
+			}
+		}
+	}
+	
+	return formatted_file_name;
 }
