@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib> // Needed for EXIT_FAILURE
+#include <limits> // Needed for std::numeric_limits
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -11,6 +13,7 @@ int main() {
 	std::string formatted_file_name;
 	std::ifstream infile("input.txt");
 
+	// Check if input file is opened successfully
 	if (!infile) {
 		std::cout << "Error: Unable to open input file. Terminating program.\n\n";
 		exit(EXIT_FAILURE);
@@ -18,8 +21,16 @@ int main() {
 
 	formatted_file_name = getFormattedFileName();
 	std::ofstream outfile(formatted_file_name);
-	std::cout << "File Created Successfully as:" << default_file_name << std::endl;
 
+	// Check if output file is opened successfully
+	if (!outfile) {
+		std::cout << "Error: Unable to open output file. Terminating program.\n\n";
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "File Created Successfully as: " << formatted_file_name << std::endl << std::endl;
+
+	// Loop through each word in the input file and remove any newline characters
 	std::string line;
 	while (getline(infile, line)) {
 		outfile << line << ' ';
@@ -31,6 +42,7 @@ int main() {
 	infile.close();
 	outfile.close();
 
+	std::cout << "\nTerminating Program...\n";
 	return 0;
 }
 
@@ -61,11 +73,13 @@ std::string getFormattedFileName() {
 				// The only valid punctuation characters are '-' and '_'
 				if (current_letter != '-' && current_letter != '_') {
 					is_valid_name = false;
-					formatted_file_name = "Output.txt";
+					formatted_file_name = "Output";
 				}
 			}
 		}
 	}
 	
+	// Add the .txt extension
+	formatted_file_name.append(".txt");
 	return formatted_file_name;
 }
