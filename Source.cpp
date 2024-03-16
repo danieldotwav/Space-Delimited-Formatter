@@ -4,13 +4,30 @@
 #include <sstream>
 using namespace std;
 
-int main() {
-	ifstream infile("input.txt");
-	ofstream outfile("Formatted.txt");
+void purgeInputErrors(string error_message);
 
-	if (!infile || !outfile) {
-		cout << "Error: Unable to open one of more files\n\n";
-		exit;
+int main() {
+	string default_file_name = "Formatted.txt";
+	string formatted_file_name;
+	ifstream infile("input.txt");
+
+	if (!infile) {
+		cout << "Error: Unable to open input file. Terminating program.\n\n";
+		exit(EXIT_FAILURE);
+	}
+
+	cout << "Enter Formatted File Name: ";
+	cin >> formatted_file_name;
+
+	ofstream outfile;
+	if (!cin) {
+		purgeInputErrors("Invalid File Name");
+		outfile.open(default_file_name);
+		cout << "File Saved as:" << default_file_name << endl;
+	}
+	else {
+		outfile.open(formatted_file_name);
+		cout << "File Saved as:" << formatted_file_name << endl;
 	}
 
 	string line;
@@ -23,4 +40,10 @@ int main() {
 	outfile.close();
 
 	return 0;
+}
+
+void purgeInputErrors(string error_message) {
+	cin.clear();
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	cout << error_message << endl;
 }
